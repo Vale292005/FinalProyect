@@ -72,5 +72,13 @@ public class User extends Node implements Comparable<User> {
         return user != null ? user.hashCode() : 0;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        User other = (User) obj;
+        return user != null && user.equals(other.user);
+    }
+
 }
 

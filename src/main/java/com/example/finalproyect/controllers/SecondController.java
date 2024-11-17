@@ -13,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 import static com.example.finalproyect.MyMap.MyTreeMap.loadFromFile;
 
 
@@ -34,64 +36,72 @@ public class SecondController {
 
 
     public void initialize() {
-        // Crear el mapa
-        MyMap = new MyTreeMap<>();
 
-        // Cargar el archivo
-        System.out.println("Cargando el archivo...");
-        MyMap=loadFromFile("C:\\Users\\Valeria\\Desktop\\admid.txt");
+        try {
+            // Crear el mapa
+            MyMap = new MyTreeMap<>();
 
-        // Verificar si el mapa tiene entradas
-        System.out.println("Imprimiendo las entradas cargadas...");
-        for (MyTreeMap.Entry<User, String> entry : MyMap.entrySet()) {
-            System.out.println("Usuario: " + entry.getKey() + " | Valor: " + entry.getValue());
-        }
+            // Cargar el archivo
+            System.out.println("Cargando el archivo...");
+            MyMap=loadFromFile("/home/malzeno/Desktop/user.txt");
 
-        // Verificar si el mapa está vacío después de cargarlo
-        if (MyMap.size() == 0) {
-            System.out.println("El mapa está vacío.");
-        } else {
-            System.out.println("El mapa contiene " + MyMap.size() + " entradas.");
+            // Verificar si el mapa tiene entradas
+            System.out.println("Imprimiendo las entradas cargadas...");
+            for (MyTreeMap.Entry<User, String> entry : MyMap.entrySet()) {
+                System.out.println("Usuario: " + entry.getKey() + " | Valor: " + entry.getValue());
+            }
+
+            // Verificar si el mapa está vacío después de cargarlo
+            if (MyMap.size() == 0) {
+                System.out.println("El mapa está vacío.");
+            } else {
+                System.out.println("El mapa contiene " + MyMap.size() + " entradas.");
+            }
+        } catch (Exception e) {
+            System.out.println();
+            System.out.println(e.getMessage());
+            System.out.println();
+            e.printStackTrace();
         }
     }
 
 
     @FXML
-    void OpenAdmin1(ActionEvent event) {
-        String cent=Usuario.getText();
-        User user=new User(null,null,null,cent);
-        String contrasenhaText=Contrasenha.getText();
+    void OpenAdmin1(ActionEvent event) throws IOException {
 
-        if(MyMap!=null) {
-            for (MyTreeMap.Entry<User, String> entry : MyMap.entrySet()) {
-                System.out.println(entry.getKey().equals(user));
-                System.out.println(entry.getKey().toString().equals("User: " + user));
-                if (entry.getKey().equals("User: " + user)) {
+        try {
+            String cent=Usuario.getText();
+            User user=new User(null,null,null,cent);
+            String contrasenhaText=Contrasenha.getText();
 
-                    try {
+            if(MyMap!=null) {
+                for (MyTreeMap.Entry<User, String> entry : MyMap.entrySet()) {
+                    System.out.println("Checking equality:");
+                    System.out.println("Key: " + entry.getKey() + " | Input User: " + user);
+                    System.out.println("Key.equals(user): " + entry.getKey().equals(user));
+                    if (user.equals(entry.getKey())) {
                         Stage currentStage = (Stage) Aceptar.getScene().getWindow();
-
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/TerceraWindow.fxml"));
                         Scene secondScene = new Scene(loader.load());
                         Stage secondStage = new Stage();
                         secondStage.setTitle("Tercera Ventana");
                         secondStage.setScene(secondScene);
                         secondStage.show();
-                        currentStage.close();  // Cerrar la ventana principal
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        currentStage.close();  // Close the main window
                     }
                 }
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ERROR");
+                alert.setHeaderText(null);
+                alert.setContentText("Ingreso invalido");
+                alert.showAndWait();
             }
-        }
-        else{            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("ERROR");
-            alert.setHeaderText(null);
-            alert.setContentText("Ingreso invalido");
-            alert.showAndWait();
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
+
 
     @FXML
     void Return(ActionEvent event) {

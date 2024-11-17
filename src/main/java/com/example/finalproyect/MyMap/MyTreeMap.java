@@ -107,11 +107,11 @@ public class MyTreeMap<K extends Comparable<K>, V> implements Iterable<K> {
     public Set<Entry<K, V>> entrySet() {
         return entries;
     }
-    public static MyTreeMap<User,String> loadFromFile(String fileName) {
+    public static MyTreeMap<User,String> loadFromFile(String route) {
         try {
             MyTreeMap<User, String> userMap = new MyTreeMap<>();
             // Lee el archivo línea por línea
-            BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\Valeria\\Desktop\\user.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader(route));
             String line;
             while ((line = reader.readLine()) != null) {
                 // Suponemos que cada línea tiene el formato: User: valor, descripcion
