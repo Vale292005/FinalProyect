@@ -43,7 +43,7 @@ public class SecondController {
 
             // Cargar el archivo
             System.out.println("Cargando el archivo...");
-            MyMap=loadFromFile("/home/malzeno/Desktop/user.txt");
+            MyMap=loadFromFile("C:\\Users\\Valeria\\Desktop\\user.txt");
 
             // Verificar si el mapa tiene entradas
             System.out.println("Imprimiendo las entradas cargadas...");
