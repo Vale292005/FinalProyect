@@ -67,40 +67,43 @@ public class SecondController {
 
 
     @FXML
-    void OpenAdmin1(ActionEvent event) throws IOException {
+    void OpenAdmin1(ActionEvent event)  {
 
         try {
             String cent=Usuario.getText();
             User user=new User(null,null,null,cent);
-            String contrasenhaText=Contrasenha.getText();
-
+            boolean exists = false;
             if(MyMap!=null) {
                 for (MyTreeMap.Entry<User, String> entry : MyMap.entrySet()) {
-                    System.out.println("Checking equality:");
-                    System.out.println("Key: " + entry.getKey() + " | Input User: " + user);
-                    System.out.println("Key.equals(user): " + entry.getKey().equals(user));
                     if (user.equals(entry.getKey())) {
-                        Stage currentStage = (Stage) Aceptar.getScene().getWindow();
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/TerceraWindow.fxml"));
-                        Scene secondScene = new Scene(loader.load());
-                        Stage secondStage = new Stage();
-                        secondStage.setTitle("Tercera Ventana");
-                        secondStage.setScene(secondScene);
-                        secondStage.show();
-                        currentStage.close();  // Close the main window
+                        exists = true;
+                        break;
                     }
                 }
+            }
+
+            if (exists) {
+                Stage currentStage = (Stage) Aceptar.getScene().getWindow();
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/TerceraWindow.fxml"));
+                Scene secondScene = new Scene(loader.load());
+                Stage secondStage = new Stage();
+                secondStage.setTitle("Tercera Ventana");
+                secondStage.setScene(secondScene);
+                secondStage.show();
+                currentStage.close();  // Cerrar la ventana principal
+            }
+            else{
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("ERROR");
                 alert.setHeaderText(null);
                 alert.setContentText("Ingreso invalido");
                 alert.showAndWait();
             }
-        } catch (Exception e){
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
+}
+}
 
 
     @FXML
