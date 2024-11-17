@@ -1,16 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Label?>
 
+<StackPane style="-fx-background-color: linear-gradient(to bottom right, #1a237e, #3949ab);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.finalproyect.controllers.User2Controller">
+   <VBox alignment="CENTER" spacing="15.0" maxWidth="600">
+      <padding>
+         <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+      </padding>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.finalproyect.controllers.User2Controller">
-   <children>
-      <ListView fx:id="ListProcess" layoutX="200.0" layoutY="33.0" prefHeight="200.0" prefWidth="200.0" />
-      <Button fx:id="Ver" layoutX="71.0" layoutY="276.0" mnemonicParsing="false" text="Ver" />
-      <Button fx:id="Editar" layoutX="190.0" layoutY="276.0" mnemonicParsing="false" text="Editar" />
-      <Button fx:id="Crear" layoutX="358.0" layoutY="276.0" mnemonicParsing="false" text="Crear" />
-      <Button fx:id="Eliminar" layoutX="482.0" layoutY="276.0" mnemonicParsing="false" text="Eliminar" />
-   </children>
-</AnchorPane>
+      <Label text="Gestión de Procesos" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;">
+         <effect>
+            <DropShadow/>
+         </effect>
+      </Label>
+
+      <Region prefHeight="10.0" />
+
+      <ListView fx:id="Listaprocesos"
+                style="-fx-background-radius: 15; -fx-background-color: rgba(255,255,255,0.9); -fx-control-inner-background: rgba(255,255,255,0.9);"
+                VBox.vgrow="ALWAYS"
+                prefHeight="250.0">
+         <effect>
+            <DropShadow/>
+         </effect>
+      </ListView>
+
+      <Region prefHeight="10.0" />
+
+      <HBox alignment="CENTER" spacing="20">
+         <Button fx:id="Ver" onAction="#Ver"
+                 style="-fx-background-color: white; -fx-text-fill: #1a237e; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20;"
+                 prefWidth="150" prefHeight="40" text="Ver">
+            <effect>
+               <DropShadow/>
+            </effect>
+         </Button>
+
+         <Button fx:id="Crear" onAction="#Crear"
+                 style="-fx-background-color: white; -fx-text-fill: #1a237e; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20;"
+                 prefWidth="150" prefHeight="40" text="Crear">
+            <effect>
+               <DropShadow/>
+            </effect>
+         </Button>
+      </HBox>
+
+      <HBox alignment="CENTER" spacing="20">
+         <Button fx:id="Editar" onAction="#Editar"
+                 style="-fx-background-color: white; -fx-text-fill: #1a237e; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20;"
+                 prefWidth="150" prefHeight="40" text="Editar">
+            <effect>
+               <DropShadow/>
+            </effect>
+         </Button>
+
+         <Button fx:id="Eliminar" onAction="#Eliminar"
+                 style="-fx-background-color: transparent; -fx-text-fill: #ff5252; -fx-font-size: 14px; -fx-font-weight: bold; -fx-border-color: #ff5252; -fx-border-radius: 20; -fx-background-radius: 20;"
+                 prefWidth="150" prefHeight="40" text="Eliminar">
+            <effect>
+               <DropShadow/>
+            </effect>
+         </Button>
+      </HBox>
+
+      <Region prefHeight="10.0" />
+
+      <Button fx:id="Regresar" onAction="#Regresar"
+              style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-border-color: white; -fx-border-radius: 20; -fx-background-radius: 20;"
+              prefWidth="150" prefHeight="40" text="Regresar">
+         <effect>
+            <DropShadow/>
+         </effect>
+      </Button>
+   </VBox>
+</StackPane>

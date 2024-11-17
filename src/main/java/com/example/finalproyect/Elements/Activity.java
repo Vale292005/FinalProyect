@@ -2,10 +2,13 @@ package com.example.finalproyect.Elements;
 
 import com.example.finalproyect.QueueTask.MyQueue;
 import com.example.finalproyect.UserTree.Node;
+import com.example.finalproyect.controllers.SharedFileName;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonTypeName("Activity")
@@ -72,6 +75,102 @@ public class Activity extends Node {
 
 	public String toString() {
 		return "Actividad [value=" + value + ", description=" + description + ", obligatoria" +mandatory+"]";
+	}
+
+	public static Activity loadFromTxt(String filePath) throws IOException {
+		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+			String value = null;
+			String description = null;
+			boolean mandatory = false;
+			MyQueue<Task> myTask = new MyQueue<>();
+			List<Node> children = new ArrayList<>();
+
+			String line;
+			while ((line = reader.readLine()) != null) {
+				line = line.trim(); // Eliminar espacios en blanco al inicio y final
+				if (line.isEmpty()) continue; // Ignorar líneas vacías
+
+				System.out.println("Leyendo línea: " + line);  // Depuración
+
+				// Extraer clave y valor
+				String[] parts = line.split(":", 2);
+				if (parts.length < 2) continue; // Si no tiene formato clave:valor, omitir
+
+				String key = parts[0].trim();
+				String valuePart = parts[1].trim();
+
+				switch (key) {
+					case "Valor":
+						value = valuePart;
+						break;
+					case "Descripción":
+						description = valuePart;
+						break;
+					case "Obligatoria":
+						mandatory = Boolean.parseBoolean(valuePart);
+						break;
+					case "Tareas":
+						// Asegúrate de que si Tareas está vacío, se maneje correctamente
+						if (!valuePart.isEmpty()) {
+							String[] tasks = valuePart.split(","); // Separar tareas por comas
+							for (String taskName : tasks) {
+								myTask.enqueue(new Task(taskName.trim(), null, null, false, 0)); // Crear tareas vacías con solo nombre
+							}
+						} else {
+							System.out.println("No se han especificado tareas."); // Depuración
+						}
+						break;
+					default:
+						// Si aparece una clave no reconocida, ignorar
+						break;
+				}
+			}
+
+			// Validar que se hayan cargado los campos obligatorios
+			if (value == null || description == null) {
+				System.out.println("Error: Falta valor o descripción");  // Depuración
+				throw new IllegalArgumentException("El archivo no contiene todos los campos obligatorios para la actividad.");
+			}
+
+			// Imprimir los valores leídos para depurar
+			System.out.println("Creando actividad con valor: " + value + ", descripción: " + description);
+			System.out.println("Tareas cargadas: " + myTask.size());  // Depuración
+
+			return new Activity(value, description, children, mandatory, myTask);
+		}
+	}
+
+
+
+
+	public static void exportToTxt(Activity activity) {
+		String fileName = SharedFileName.fileName;  // Obtiene el nombre del archivo compartido
+
+		// Crear contenido a partir de los atributos de la actividad
+		String content = "Actividad: \n";
+		content += "Valor: " + activity.getValue() + "\n";
+		content += "Descripción: " + activity.getDescription() + "\n";
+		content += "Obligatoria: " + activity.isMandatory() + "\n";
+		content += "Tareas: \n";
+
+		if (!(activity.getMyTask() == null || !activity.getMyTask().iterator().hasNext())) {
+			for (Task task : activity.getMyTask()) {
+				content += "\tTarea: \n";
+				content += "\t\tValor: " + task.getValue() + "\n";
+				content += "\t\tDescripción: " + task.getDescription() + "\n";
+				content += "\t\tObligatoria: " + task.isMandatory() + "\n";
+				content += "\t\tTiempo: " + task.getTime() + "\n";
+			}
+		}
+
+
+		// Escribir en el archivo
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName,true))) {
+			writer.write(content);
+			System.out.println("Actividad exportada a " + fileName);
+		} catch (IOException e) {
+			System.err.println("Error al escribir en el archivo: " + e.getMessage());
+		}
 	}
 
 }
