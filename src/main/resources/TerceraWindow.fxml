@@ -1,20 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.DropShadow?>
 
-<VBox alignment="CENTER" fillWidth="false" prefHeight="337.0" prefWidth="348.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.finalproyect.controllers.TercerController">
-   <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-   </padding>
-   <children>
-      <ListView fx:id="ListTree" prefHeight="200.0" prefWidth="200.0" />
-      <Button fx:id="Ver" mnemonicParsing="false" onAction="#Ver" text="Ver" />
-      <Button fx:id="Exportar" mnemonicParsing="false" onAction="#Exportar" text="Exportar" />
-      <Button fx:id="Importar" mnemonicParsing="false" onAction="#Importar" text="Importar" />
-      <Button fx:id="Eliminar" mnemonicParsing="false" onAction="#Eliminar" text="Eliminar" />
-      <Button fx:id="Regresar" mnemonicParsing="false" onAction="#Regresar" text="Regresar" />
-   </children>
-</VBox>
+<StackPane style="-fx-background-color: linear-gradient(to bottom right, #1a237e, #3949ab);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.finalproyect.controllers.TercerController">
+   <VBox alignment="CENTER" spacing="15.0" maxWidth="500">
+      <padding>
+         <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+      </padding>
+
+      <Text fill="WHITE" text="Gestión de Archivos" textAlignment="CENTER">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+         <effect>
+            <DropShadow/>
+         </effect>
+      </Text>
+
+      <Region prefHeight="20.0" />
+
+      <ListView fx:id="ListTree" prefHeight="250.0" prefWidth="400.0"
+                style="-fx-background-radius: 15; -fx-background-color: rgba(255,255,255,0.9);"/>
+
+      <HBox spacing="10" alignment="CENTER">
+         <Button fx:id="Ver" onAction="#Ver"
+                 style="-fx-background-color: white; -fx-text-fill: #1a237e; -fx-font-weight: bold; -fx-background-radius: 20;"
+                 prefWidth="120" prefHeight="40" text="Ver">
+            <effect>
+               <DropShadow/>
+            </effect>
+         </Button>
+
+         <Button fx:id="Exportar" onAction="#Exportar"
+                 style="-fx-background-color: white; -fx-text-fill: #1a237e; -fx-font-weight: bold; -fx-background-radius: 20;"
+                 prefWidth="120" prefHeight="40" text="Exportar">
+            <effect>
+               <DropShadow/>
+            </effect>
+         </Button>
+
+         <Button fx:id="Importar" onAction="#Importar"
+                 style="-fx-background-color: white; -fx-text-fill: #1a237e; -fx-font-weight: bold; -fx-background-radius: 20;"
+                 prefWidth="120" prefHeight="40" text="Importar">
+            <effect>
+               <DropShadow/>
+            </effect>
+         </Button>
+      </HBox>
+
+      <Button fx:id="Eliminar" onAction="#Eliminar"
+              style="-fx-background-color: #ff1744; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20;"
+              prefWidth="200" prefHeight="40" text="Eliminar">
+         <effect>
+            <DropShadow/>
+         </effect>
+      </Button>
+
+      <Button fx:id="Regresar" onAction="#Regresar"
+              style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white; -fx-background-radius: 20;"
+              prefWidth="200" prefHeight="40" text="Regresar"/>
+   </VBox>
+</StackPane>
