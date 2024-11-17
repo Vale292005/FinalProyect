@@ -66,7 +66,7 @@ public class UserTreeSerializer {
         mapper.writeValue(new java.io.File(filePath), root);
     }
     
-    public UserTree deserialize(File jsonFile) throws IOException {
+    public static UserTree deserialize(File jsonFile) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         // Ignora propiedades desconocidas que puedan estar en el JSON
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

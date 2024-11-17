@@ -1,6 +1,23 @@
 package com.example.finalproyect.controllers;
+import javafx.scene.shape.Circle;
+import javafx.scene.layout.Pane;
+import javafx.scene.Group;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.paint.Color;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Line;
 
+import com.example.finalproyect.Elements.Activity;
+import com.example.finalproyect.Elements.ProcessUQ;
+import com.example.finalproyect.Elements.Task;
+import com.example.finalproyect.Json.UserTreeImporter;
 import com.example.finalproyect.MyMap.MyTreeMap;
+import com.example.finalproyect.QueueTask.MyQueue;
 import com.example.finalproyect.UserTree.User;
 import com.example.finalproyect.UserTree.UserTree;
 import javafx.event.ActionEvent;
@@ -8,19 +25,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.TreeMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static com.example.finalproyect.Json.JsonToCsvExporter.exportJsonToCsv;
 import static com.example.finalproyect.Json.JsonToCsvExporter.readJsonFromFile;
-
 public class TercerController {
 
     @FXML
@@ -33,7 +49,7 @@ public class TercerController {
     private Button Importar;
 
     @FXML
-    private ListView<MyTreeMap<User,UserTree>> ListTree;
+    private ListView<UserTree> ListTree;
 
     @FXML
     private Button Regresar;
@@ -42,14 +58,29 @@ public class TercerController {
     private Button Ver;
 
     private MyTreeMap<User, UserTree> treeMap;
+    private UserTree Tree;
 
-    public void initialize (){
-        treeMap=new MyTreeMap<>();
-        treeMap.loadFromJson("C:\\Users\\Valeria\\eclipse-workspace\\ProyectoFinal\\arbol.json");
+    public void initialize() {
+        ArrayList<UserTree> trees=new ArrayList<>();
+        try {
+            String jsonPath = "arbol.json";
+            UserTree userTree = UserTreeImporter.importFromJson(jsonPath);
+            if (userTree == null || userTree.getRoot() == null) {
+                System.err.println("Error: El árbol o su raíz es null");
+                return;
+            }
+            System.out.println("Árbol cargado exitosamente");
+            User user=userTree.getRoot();
+            trees.add(userTree);
+            ListTree.getItems().add(userTree);
 
-        ListTree.getItems().add(treeMap);
-        ListTree.getItems().add(treeMap);
-
+        } catch (IOException e) {
+            System.err.println("Error al cargar el archivo JSON: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Error inesperado: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
     private void showSuccessAlert() {
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -80,7 +111,7 @@ public class TercerController {
 
     @FXML
     void Eliminar(ActionEvent event) {
-        MyTreeMap selectedItem = ListTree.getSelectionModel().getSelectedItem();
+        UserTree selectedItem = ListTree.getSelectionModel().getSelectedItem();
 
         // Comprobar si hay un elemento seleccionado
         if (selectedItem != null) {
@@ -110,7 +141,7 @@ public class TercerController {
 
     @FXML
     void Exportar(ActionEvent event) {
-        MyTreeMap selectedItem = ListTree.getSelectionModel().getSelectedItem();
+        UserTree selectedItem = ListTree.getSelectionModel().getSelectedItem();
 
         if (selectedItem != null) {        try {
             // Ruta del archivo JSON (reemplaza con la ruta de tu archivo JSON)
@@ -131,7 +162,7 @@ public class TercerController {
 
     @FXML
     void Importar(ActionEvent event) {
-        MyTreeMap selectedItem = ListTree.getSelectionModel().getSelectedItem();
+        UserTree selectedItem = ListTree.getSelectionModel().getSelectedItem();
 
         if (selectedItem != null) {
             try {
@@ -167,32 +198,137 @@ public class TercerController {
 
     @FXML
     void Ver(ActionEvent event) {
-        try {
-            // Cargar el JSON desde el archivo seleccionado
-            MyTreeMap selectedItem = ListTree.getSelectionModel().getSelectedItem();
-            String jsonString = new String(Files.readAllBytes(Paths.get(selectedItem.toString())));
-            JSONObject jsonObject = new JSONObject(jsonString);
+        UserTree userTree =ListTree.getSelectionModel().getSelectedItem();
+        // Crear un panel para contener el árbol
+        Pane treePane = new Pane();
 
-            // Crear una nueva ventana (Stage)
-            Stage treeWindow = new Stage();
-            treeWindow.setTitle("Árbol JSON");
+        // Crear la escena para mostrar el árbol
+        Scene scene = new Scene(treePane, 1000, 800);
+        Stage stage = new Stage();
+        stage.setTitle("Jerarquía de Usuario - Procesos - Actividades - Tareas");
 
-            // Crear el TreeItem raíz
-            TreeItem<String> rootItem = createTree(jsonObject);
+        // Obtener el root user del árbol y comenzar a dibujar
+        drawUserTree(userTree.getRoot(), 500, 50, treePane);
 
-            // Crear el TreeView con el TreeItem raíz
-            TreeView<String> treeView = new TreeView<>(rootItem);
+        stage.setScene(scene);
+        stage.show();
+    }
 
-            // Crear la escena para la nueva ventana
-            StackPane root = new StackPane();
-            root.getChildren().add(treeView);
-            Scene scene = new Scene(root, 600, 400);
-            treeWindow.setScene(scene);
-            treeWindow.show();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace(); // Maneja posibles excepciones, como la no existencia del archivo
+    private void drawUserTree(User node, double x, double y, Pane pane) {
+        // Dibujar nodo de usuario
+        drawNode(x, y, node.getValue(), "Usuario", "#4CAF50", pane);
+
+        // Calcular posiciones para los procesos
+        int numProcesses = node.getChild().size();
+        double startX = x - (numProcesses - 1) * 200.0;
+        double processY = y + 120;
+
+        // Dibujar procesos
+        for (int i = 0; i < numProcesses; i++) {
+            ProcessUQ process = (ProcessUQ) node.getChild().get(i);
+            double processX = startX + i * 200;
+
+            // Línea conectora
+            drawConnector(x, y, processX, processY, pane);
+
+            // Dibujar proceso
+            drawNode(processX, processY, process.getValue(), "Proceso", "#2196F3", pane);
+
+            // Dibujar actividades del proceso
+            drawActivities(process, processX, processY, pane);
         }
+    }
+
+    private void drawActivities(ProcessUQ process, double processX, double processY, Pane pane) {
+        int numActivities = process.getChild().size();
+        double startX = processX - (numActivities - 1) * 150.0;
+        double activityY = processY + 120;
+
+        for (int i = 0; i < numActivities; i++) {
+            Activity activity = (Activity) process.getChild().get(i);
+            double activityX = startX + i * 150;
+
+            // Línea conectora
+            drawConnector(processX, processY, activityX, activityY, pane);
+
+            // Dibujar actividad
+            drawNode(activityX, activityY, activity.getValue(), "Actividad", "#FFC107", pane);
+
+            // Dibujar tareas de la actividad
+            drawTasks(activity, activityX, activityY, pane);
+        }
+    }
+
+    private void drawTasks(Activity activity, double activityX, double activityY, Pane pane) {
+        MyQueue<Task> tasks = activity.getMyTask();
+        List<Task> taskList = new ArrayList<>();
+        for (Task task : tasks) {
+            taskList.add(task);
+        }
+        int numTasks = taskList.size();
+        double startX = activityX - (numTasks - 1) * 100.0;
+        double taskY = activityY + 120;
+
+        for (int i = 0; i < numTasks; i++) {
+            Task task = taskList.get(i);
+            double taskX = startX + i * 100;
+
+            // Línea conectora
+            drawConnector(activityX, activityY, taskX, taskY, pane);
+
+            // Dibujar tarea
+            drawNode(taskX, taskY, task.getValue(), "Tarea", "#FF5722", pane);
+        }
+    }
+
+    private void drawNode(double x, double y, String name, String type, String color, Pane pane) {
+        // Crear grupo para el nodo
+        Group nodeGroup = new Group();
+
+        // Crear círculo para el nodo
+        Circle circle = new Circle(x, y, 30);
+        circle.setFill(Color.web(color));
+        circle.setStroke(Color.BLACK);
+        circle.setStrokeWidth(2);
+
+        // Crear texto para el nombre
+        Text nameText = new Text(name);
+        nameText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        nameText.setFill(Color.WHITE);
+        double textX = x - nameText.getBoundsInLocal().getWidth() / 2;
+        double textY = y;
+        nameText.setX(textX);
+        nameText.setY(textY);
+
+        // Crear texto para el tipo
+        Text typeText = new Text(type);
+        typeText.setFont(Font.font("Arial", 10));
+        typeText.setFill(Color.WHITE);
+        double typeX = x - typeText.getBoundsInLocal().getWidth() / 2;
+        double typeY = y + 15;
+        typeText.setX(typeX);
+        typeText.setY(typeY);
+
+        // Añadir efectos
+        circle.setEffect(new DropShadow(10, Color.GRAY));
+
+        // Añadir tooltip
+        Tooltip tooltip = new Tooltip(name + "\nTipo: " + type);
+        Tooltip.install(circle, tooltip);
+
+        // Añadir interactividad
+        circle.setOnMouseEntered(e -> circle.setFill(Color.web(color).brighter()));
+        circle.setOnMouseExited(e -> circle.setFill(Color.web(color)));
+
+        pane.getChildren().addAll(circle, nameText, typeText);
+    }
+
+    private void drawConnector(double startX, double startY, double endX, double endY, Pane pane) {
+        Line line = new Line(startX, startY + 30, endX, endY - 30);
+        line.setStroke(Color.GRAY);
+        line.setStrokeWidth(2);
+        line.getStrokeDashArray().addAll(5d);
+        pane.getChildren().add(line);
     }
 
     // Método recursivo para crear el árbol a partir del JSONObject

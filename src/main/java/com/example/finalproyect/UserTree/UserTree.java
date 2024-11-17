@@ -6,13 +6,18 @@ import com.example.finalproyect.Features.TaskSearchTask;
 import com.example.finalproyect.QueueTask.MyQueue;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -166,10 +171,10 @@ public class UserTree {
     }
 
     // Método para importar desde JSON
-    public static UserTree importFromJson(String filePath) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(new File(filePath), UserTree.class);
-    }
+//    public static UserTree importFromJson(String filePath) throws IOException {
+//        ObjectMapper mapper = new ObjectMapper();
+//        return mapper.readValue(new File(filePath), UserTree.class);
+//    }
 
 
 }

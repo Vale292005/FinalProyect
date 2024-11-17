@@ -25,13 +25,13 @@ public class RegistroController {
     private TextField Contrasenha;
 
     @FXML
-    private Label Correo;
-
-    @FXML
     private Button Regresar;
 
     @FXML
     private TextField Usuario;
+    @FXML
+    private TextField Correo;
+
 
     private MyTreeMap<User,String> UserMap;
     private MyTreeMap<User,String> gmailMap;
@@ -153,4 +153,6 @@ public class RegistroController {
     }
 
 
+    public void getCorreo(ActionEvent event) {
+    }
 }

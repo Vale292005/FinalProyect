@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="Crear_Actividad" mnemonicParsing="false" onAction="#Crear_Actividad" text="Crear Actividad" />
+      <Button fx:id="Eliminar_Actividad" mnemonicParsing="false" onAction="#Eliminar_Actividad" text="Eliminar Actividad" />
+      <ListView fx:id="ListaTareas" prefHeight="200.0" prefWidth="200.0" />
+      <Button fx:id="Crear_tarea_despues_de" mnemonicParsing="false" onAction="#Crear_tarea_despues_de" text="Crear tarea despues de:" />
+      <Button fx:id="Eliminar_Tarea" mnemonicParsing="false" onAction="#Eliminar_Tarea" text="Eliminar Tarea" />
+      <Button fx:id="Regreso" mnemonicParsing="false" onAction="#Regreso" text="Regreso" />
+   </children>
+</VBox>

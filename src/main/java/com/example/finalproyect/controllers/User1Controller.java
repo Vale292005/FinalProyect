@@ -58,7 +58,7 @@ public class User1Controller {
                     try {
                         Stage currentStage = (Stage) Aceptar.getScene().getWindow();
 
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/User2.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/User2Windown.fxml"));
                         Scene secondScene = new Scene(loader.load());
                         Stage secondStage = new Stage();
                         secondStage.setScene(secondScene);

@@ -34,7 +34,7 @@
                      prefWidth="250" prefHeight="35"/>
 
       <Label text="Correo" textFill="WHITE" style="-fx-font-size: 14px;"/>
-      <TextField fx:id="Correo"
+      <TextField fx:id="Correo" onAction="#getCorreo"
                  style="-fx-background-radius: 15; -fx-background-color: rgba(255,255,255,0.9);"
                  prefWidth="250" prefHeight="35"/>
 
