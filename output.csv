@@ -1,0 +1,4 @@
+Usuario,Proceso,Actividad,Tarea,Descripción,Tarea Obligatoria,Tiempo
+Usuario Root,Proceso 1,Actividad 1,Tarea 1,Descripción de la tarea 1,true,30
+Usuario Root,Proceso 1,Actividad 1,Tarea 2,Descripción de la tarea 2,false,45
+Usuario Root,Proceso 1,Actividad 1,Tarea 3,Descripción de la tarea 3,false,60

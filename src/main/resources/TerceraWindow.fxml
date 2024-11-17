@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" fillWidth="false" prefHeight="337.0" prefWidth="348.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.finalproyect.controllers.TercerController">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <children>
+      <ListView fx:id="ListTree" prefHeight="200.0" prefWidth="200.0" />
+      <Button fx:id="Ver" mnemonicParsing="false" onAction="#Ver" text="Ver" />
+      <Button fx:id="Exportar" mnemonicParsing="false" onAction="#Exportar" text="Exportar" />
+      <Button fx:id="Importar" mnemonicParsing="false" onAction="#Importar" text="Importar" />
+      <Button fx:id="Eliminar" mnemonicParsing="false" onAction="#Eliminar" text="Eliminar" />
+      <Button fx:id="Regresar" mnemonicParsing="false" onAction="#Regresar" text="Regresar" />
+   </children>
+</VBox>

@@ -1,0 +1,45 @@
+module com.example.finalproyect {
+    requires javafx.controls;
+    requires javafx.fxml;
+
+
+    opens com.example.finalproyect to javafx.fxml;
+    exports com.example.finalproyect;
+}
+
+
+
+
+
+
+
+
+
+
+module com.example.finalproyect {
+    requires javafx.controls;
+    requires javafx.fxml;
+    requires javafx.graphics;
+
+    requires com.fasterxml.jackson.annotation;
+    requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.core;
+
+    requires java.mail;
+    requires java.desktop;
+    requires org.apache.commons.collections4;
+
+    requires com.jfoenix;
+    requires jdk.internal.le;
+
+    // Exported packages
+    exports com.example.finalproyect;
+    exports UserTree;
+    exports Features;
+
+    // Open packages for reflection
+    opens com.example.finalproyect to javafx.fxml;
+    opens UserTree to com.fasterxml.jackson.databind;
+    opens Elements to com.fasterxml.jackson.databind;
+    opens QueueTask to com.fasterxml.jackson.databind;
+}

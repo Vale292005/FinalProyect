@@ -1,0 +1,32 @@
+{
+  "value" : "Usuario Root",
+  "description" : "Usuario principal",
+  "children" : [ {
+    "value" : "Proceso 1",
+    "description" : "Descripción del proceso 1",
+    "idProcess" : "ID1",
+    "children" : [ {
+      "value" : "Actividad 1",
+      "description" : "Descripción de la actividad 1",
+      "mandatory" : false,
+      "myTask" : {
+        "queue" : [ {
+          "value" : "Tarea 1",
+          "description" : "Descripción de la tarea 1",
+          "mandatory" : true,
+          "time" : 30
+        }, {
+          "value" : "Tarea 2",
+          "description" : "Descripción de la tarea 2",
+          "mandatory" : false,
+          "time" : 45
+        }, {
+          "value" : "Tarea 3",
+          "description" : "Descripción de la tarea 3",
+          "mandatory" : false,
+          "time" : 60
+        } ]
+      }
+    } ]
+  } ]
+}
