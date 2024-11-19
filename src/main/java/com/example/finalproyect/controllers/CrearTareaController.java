@@ -143,6 +143,7 @@ public class CrearTareaController {
     }
     @FXML
     void Ver(ActionEvent event) throws IOException {
+        listTree=new ArrayList<>();
 
         User user=new User();
         UserTree treeUser=new UserTree(null);
@@ -168,8 +169,8 @@ public class CrearTareaController {
             vaciarArchivo(filePathActividades);
             vaciarArchivo(filePathProcesos);
             String filePath = "arbol.json";
-            //listTree.add(treeUser.toString());
-            //escribirEnArchivo("listTree.txt",listTree);
+            listTree.add(treeUser+"");
+            escribirEnArchivo("C:\\Users\\Valeria\\Desktop\\arbol.txt",listTree);
             prueba.serialize(treeUser.getRoot(), filePath);
 
             // Procesar las tareas, actividades y procesos
