@@ -1,4 +1,5 @@
 package com.example.finalproyect.controllers;
+import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.layout.Pane;
 import javafx.scene.Group;
@@ -26,10 +27,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,6 +64,7 @@ public class TercerController {
     private UserTree Tree;
 
     public void initialize() {
+
 
         ArrayList<UserTree> trees=new ArrayList<>();
         try {
@@ -163,21 +167,42 @@ public class TercerController {
 
     @FXML
     void Importar(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+
+        // Establecer el tipo de archivo que se puede seleccionar (opcional)
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Archivos de texto", "*.txt", "*.json");
+        fileChooser.getExtensionFilters().add(filter);
+
+        // Muestra el cuadro de diálogo para elegir el archivo
+        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow(); // Obtener el stage actual
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        // Si se seleccionó un archivo, procesa el archivo
+        if (selectedFile != null) {
+            System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
+            try {
+                // Pasar la ruta del archivo como String a la función
+                JSONObject jsonObject = readJsonFromFile(selectedFile.getAbsolutePath());
+
+                System.out.println("Contenido del JSON: " + jsonObject.toString(2)); // Muestra el JSON formateado
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("No se seleccionó ningún archivo.");
+        }
+
         UserTree selectedItem = ListTree.getSelectionModel().getSelectedItem();
 
         if (selectedItem != null) {
-            try {
-            String jsonFilePath = "arbol1.json"; // Cambia la ruta según sea necesario
-            JSONObject jsonObject = readJsonFromFile(jsonFilePath);
-
-            System.out.println("Contenido del JSON: " + jsonObject.toString(2)); // Muestra el JSON formateado
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }}
-        else{showErrorAlert();}
-
+            // Aquí puedes agregar más lógica si es necesario
+        } else {
+            showErrorAlert();
+        }
     }
+
+
 
     @FXML
     void Regresar(ActionEvent event) {
