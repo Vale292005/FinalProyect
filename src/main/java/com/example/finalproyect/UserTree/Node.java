@@ -30,6 +30,7 @@ public abstract class Node {
 
     @JsonProperty
     protected static List<Node> children;
+    private ArrayList<Activity> c;
 
     public Node() {
         // Constructor vacío
@@ -70,6 +71,9 @@ public abstract class Node {
     public void setChild(List<Node> children) {
         this.children = children;
     }
+    public void setChildren(ArrayList<Activity> c){
+        this.c = c;
+        this.children=children;}
 
     public abstract void add(Node child);
     public abstract void printNodeInfo();

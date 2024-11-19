@@ -168,6 +168,7 @@ public class Activity extends Node {
 	public void serialize(BufferedWriter writer) throws IOException {
 		writer.write("\tActividad:\n");
 		writer.write("\tNombre: " + value + "\n");
+		writer.write("\tDescripcion: " + description + "\n");
 		writer.write("\tObligatoria: " + mandatory + "\n");
 
 		if (getChild() != null) {
@@ -186,6 +187,8 @@ public class Activity extends Node {
 			}
 		}
 	}
+
+
 
 
 }

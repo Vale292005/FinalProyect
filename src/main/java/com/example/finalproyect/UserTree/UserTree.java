@@ -169,7 +169,22 @@ public class UserTree {
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(new File(filePath), this);
     }
+    public static void escribirEnArchivo(String filePath, ArrayList<String> listaDeDatos) throws IOException {
+        File archivo = new File(filePath);
 
+        // Si el archivo no existe, lo crea
+        if (!archivo.exists()) {
+            archivo.createNewFile();
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo,true))) {
+            // Escribir cada línea del ArrayList en el archivo
+            for (String dato : listaDeDatos) {
+                writer.write(dato);
+                writer.newLine();  // Salto de línea entre elementos
+            }
+        }
+    }
 
 
 }

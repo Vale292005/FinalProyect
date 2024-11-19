@@ -61,6 +61,7 @@ public class TercerController {
     private UserTree Tree;
 
     public void initialize() {
+
         ArrayList<UserTree> trees=new ArrayList<>();
         try {
             String jsonPath = "arbol.json";

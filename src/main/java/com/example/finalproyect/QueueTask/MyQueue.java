@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -113,6 +116,54 @@ public class MyQueue<T> implements Iterable<T> {
     }
     public void add(T item) {
         queue.add(item); 
+    }
+    public MyQueue<Task> deserializeTareas(BufferedReader reader) throws IOException {
+        MyQueue<Task> tareas = new MyQueue<>();
+        String line;
+        Task tareaActual = null;
+
+        while ((line = reader.readLine()) != null) {
+            line = line.trim();
+
+            // Cuando encontramos una línea que empieza con "Tarea:"
+            if (line.startsWith("Tarea:")) {
+                tareaActual = new Task(null,null,new ArrayList<>(),false,0);  // Crear una nueva tarea
+
+                // Leemos las siguientes líneas correspondientes a los atributos de la tarea
+                while ((line = reader.readLine()) != null && line.trim().startsWith("\t")) {
+                    line = line.trim();
+
+                    // Leer el valor de "Valor:"
+                    if (line.startsWith("Valor:")) {
+                        tareaActual.setValue(line.split(":")[1].trim());
+                    }
+
+                    // Leer el valor de "Descripción:"
+                    if (line.startsWith("Descripción:")) {
+                        tareaActual.setDescription(line.split(":")[1].trim());
+                    }
+
+                    // Leer el valor de "Obligatoria:"
+                    if (line.startsWith("Obligatoria:")) {
+                        tareaActual.setMandatory(Boolean.parseBoolean(line.split(":")[1].trim()));
+                    }
+
+                    // Leer el valor de "Tiempo:"
+                    if (line.startsWith("Tiempo:")) {
+                        tareaActual.setTime(Integer.parseInt(line.split(":")[1].trim()));
+                    }
+
+                    if (line.trim().equals("")) break;
+                }
+
+                // Agregar la tarea a la cola
+                if (tareaActual != null) {
+                    tareas.add(tareaActual);
+                }
+            }
+        }
+
+        return tareas;
     }
 
 }

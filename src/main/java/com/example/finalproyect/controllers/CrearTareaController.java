@@ -3,12 +3,10 @@ package com.example.finalproyect.controllers;
 import com.example.finalproyect.Elements.Activity;
 import com.example.finalproyect.Elements.ProcessUQ;
 import com.example.finalproyect.Elements.Task;
+import com.example.finalproyect.Json.prueba;
 import com.example.finalproyect.MyMap.MyTreeMap;
 import com.example.finalproyect.QueueTask.MyQueue;
-import com.example.finalproyect.UserTree.Node;
-import com.example.finalproyect.UserTree.NodeSerializer;
-import com.example.finalproyect.UserTree.User;
-import com.example.finalproyect.UserTree.UserTree;
+import com.example.finalproyect.UserTree.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,15 +25,21 @@ import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.finalproyect.Elements.Activity.exportToTxt;
 import static com.example.finalproyect.Elements.ProcessUQ.serializeProcess;
+import static com.example.finalproyect.Json.UserTreeSerializer.deserialize;
 import static com.example.finalproyect.MyMap.MyTreeMap.loadFromFile;
+import static com.example.finalproyect.UserTree.UserTree.escribirEnArchivo;
 
 public class CrearTareaController {
+    private ArrayList<String> listTree;
     @FXML
     private Button Ver;
 
@@ -138,11 +142,40 @@ public class CrearTareaController {
         }
     }
     @FXML
-    void Ver(ActionEvent event) {
+    void Ver(ActionEvent event) throws IOException {
 
+        User user=new User();
+        UserTree treeUser=new UserTree(null);
+        String filePathTareas = "C:\\Users\\Valeria\\Desktop\\tareas.txt";
+        String filePathActividades = "C:\\Users\\Valeria\\Desktop\\actividades.txt";
+        String filePathProcesos = "C:\\Users\\Valeria\\Desktop\\procesos.txt";
 
+        Deserializador deserializador = new Deserializador();
 
+        try {
+            MyQueue<Task> tareas = deserializador.deserializeTareas(filePathTareas);
+            ArrayList<Activity> actividades = deserializador.deserializeActividades(filePathActividades);
+            ArrayList<ProcessUQ> procesos = deserializador.deserializeProcesos(filePathProcesos);
+            Activity actividad=actividades.get(0);
+            actividad.setMyTask(tareas);
+            ProcessUQ proceso=procesos.get(0);
+            proceso.getChild().add(actividad);
+            user.getChild().addAll(procesos);
+            treeUser.setRoot(user);
+            prueba serializer = new prueba();
 
+            vaciarArchivo(filePathTareas);
+            vaciarArchivo(filePathActividades);
+            vaciarArchivo(filePathProcesos);
+            String filePath = "arbol.json";
+            //listTree.add(treeUser.toString());
+            //escribirEnArchivo("listTree.txt",listTree);
+            prueba.serialize(treeUser.getRoot(), filePath);
+
+            // Procesar las tareas, actividades y procesos
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if (treeUser != null) {
             Pane treePane = new Pane();
@@ -159,6 +192,17 @@ public class CrearTareaController {
             stage.show();
         } else {
             showErrorAlert("El árbol de usuarios no se ha inicializado.");
+        }
+    }
+    public static void vaciarArchivo(String filePath) throws IOException {
+        File file = new File(filePath);
+
+        // Si el archivo existe, vaciar su contenido
+        if (file.exists()) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                // Escribir un string vacío en el archivo para borrar su contenido
+                writer.write("");
+            }
         }
     }
 
