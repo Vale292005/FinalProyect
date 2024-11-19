@@ -1,6 +1,8 @@
 package com.example.finalproyect.controllers;
 
 import com.example.finalproyect.Elements.ProcessUQ;
+import com.example.finalproyect.UserTree.NodeSerializer;
+import com.example.finalproyect.UserTree.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,8 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
-import static com.example.finalproyect.Elements.ProcessUQ.exportToTxt;
+import static com.example.finalproyect.UserTree.NodeSerializer.serializeNode;
+
 
 public class CrearController {
 
@@ -32,16 +36,19 @@ public class CrearController {
     @FXML
     private Button Regreso;
     public static ProcessUQ process;
+    private User user;
 
     @FXML
     void Anhadir_actividad(ActionEvent event) throws IOException {
+
         String name= Nombre.getText();
         String description=Descripcion.getText();
         String id=Id.getText();
         if(!(name.isEmpty()||description.isEmpty()||id.isEmpty())){
-            ProcessUQ process=new ProcessUQ(name,description,null,id);
-            exportToTxt(process,"C:\\Users\\Valeria\\Desktop\\process.txt");
+
             try {
+                process=new ProcessUQ(name,description,new ArrayList<>(),id);
+                NodeSerializer.serializeNode(process,"C:\\Users\\Valeria\\Desktop\\procesos.txt");
                 Stage currentStage = (Stage) Regreso.getScene().getWindow();
 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/CrearActividad.fxml"));

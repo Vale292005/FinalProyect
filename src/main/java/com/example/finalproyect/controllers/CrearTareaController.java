@@ -6,21 +6,38 @@ import com.example.finalproyect.Elements.Task;
 import com.example.finalproyect.MyMap.MyTreeMap;
 import com.example.finalproyect.QueueTask.MyQueue;
 import com.example.finalproyect.UserTree.Node;
+import com.example.finalproyect.UserTree.NodeSerializer;
+import com.example.finalproyect.UserTree.User;
+import com.example.finalproyect.UserTree.UserTree;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.finalproyect.Elements.Activity.exportToTxt;
+import static com.example.finalproyect.Elements.ProcessUQ.serializeProcess;
 import static com.example.finalproyect.MyMap.MyTreeMap.loadFromFile;
 
 public class CrearTareaController {
+    @FXML
+    private Button Ver;
 
     @FXML
     private Button Anhadir_Tarea;
@@ -45,23 +62,11 @@ public class CrearTareaController {
     private Activity activity;
     private ProcessUQ processUQ;
     private MyQueue<Task> queue;
+    private UserTree treeUser;
 
-
-    public void initialize() throws IOException {
-       activity=activity.loadFromTxt(SharedFileName.fileName);
-       processUQ=processUQ.loadFromTxt("C:\\Users\\Valeria\\Desktop\\process.txt");
-    }
 
     @FXML
     void Anhadir_Tarea(ActionEvent event) {
-        // Verificar si la actividad está inicializada
-        System.out.println("Estado de activity: " + activity);
-        if (activity == null) {
-            showErrorAlert("La actividad no está inicializada.");
-            return;
-        }
-
-        // Obtener y limpiar los datos de los campos
         String name = Nombre.getText().trim();
         String description = Descripcion.getText().trim();
         String mandatoryText = Obligatoria.getText().trim();
@@ -79,24 +84,13 @@ public class CrearTareaController {
             int time = Integer.parseInt(timeText);  // Convierte el tiempo en un número entero
 
             // Crear la tarea
-            Task task = new Task(name, description, null, mandatory, time);
+            Task task = new Task(name, description, new ArrayList<>(), mandatory, time);
 
-            // Inicializar la cola si no está creada
             if (queue == null) {
                 queue = new MyQueue<>();
             }
-
-            // Agregar la tarea a la cola
             queue.enqueue(task);
-
-            // Asignar la cola a la actividad
-            activity.setMyTask(queue);
-            List<Node> s=new ArrayList<>();
-            s.add(activity);
-            processUQ.setChild(s);
-
-            // Exportar los datos a un archivo de texto
-            exportToTxt(activity);
+            NodeSerializer.serializeNode(task,"C:\\Users\\Valeria\\Desktop\\tareas.txt");
 
             // Mostrar éxito
             showSuccessAlert("Tarea añadida exitosamente.");
@@ -143,5 +137,161 @@ public class CrearTareaController {
             e.printStackTrace();
         }
     }
+    @FXML
+    void Ver(ActionEvent event) {
 
-}
+
+
+
+
+        if (treeUser != null) {
+            Pane treePane = new Pane();
+
+            // Crear la escena para mostrar el árbol
+            Scene scene = new Scene(treePane, 1000, 800);
+            Stage stage = new Stage();
+            stage.setTitle("Jerarquía de Usuario - Procesos - Actividades - Tareas");
+
+            // Obtener el nodo raíz del árbol y comenzar a dibujar
+            drawUserTree(treeUser.getRoot(), 500, 50, treePane);
+
+            stage.setScene(scene);
+            stage.show();
+        } else {
+            showErrorAlert("El árbol de usuarios no se ha inicializado.");
+        }
+    }
+
+    private void drawUserTree(User node, double x, double y, Pane pane) {
+        drawNode(x, y, node.getValue(), "Usuario", "#4CAF50", pane);
+
+        // Calcular posiciones para los procesos
+        int numProcesses = node.getChild().size();
+        double startX = x - (numProcesses - 1) * 200.0;
+        double processY = y + 120;
+
+        for (int i = 0; i < numProcesses; i++) {
+            if (node.getChild().get(i) instanceof ProcessUQ process) { // Verifica tipo
+                double processX = startX + i * 200;
+
+                drawConnector(x, y, processX, processY, pane);
+                drawNode(processX, processY, process.getValue(), "Proceso", "#2196F3", pane);
+
+                drawActivities(process, processX, processY, pane);
+            }
+        }
+    }
+
+    private void drawActivities(ProcessUQ process, double processX, double processY, Pane pane) {
+        int numActivities = process.getChild().size();
+        double startX = processX - (numActivities - 1) * 150.0;
+        double activityY = processY + 120;
+
+        for (int i = 0; i < numActivities; i++) {
+            if (process.getChild().get(i) instanceof Activity activity) { // Verifica tipo
+                double activityX = startX + i * 150;
+
+                drawConnector(processX, processY, activityX, activityY, pane);
+                drawNode(activityX, activityY, activity.getValue(), "Actividad", "#FFC107", pane);
+
+                drawTasks(activity, activityX, activityY, pane);
+            }
+        }
+    }
+
+    private void drawTasks(Activity activity, double activityX, double activityY, Pane pane) {
+        MyQueue<Task> tasks = activity.getMyTask();
+        List<Task> taskList = new ArrayList<>();
+        for (Task task : tasks) { // Extraer tareas de la cola
+            taskList.add(task);
+        }
+
+        int numTasks = taskList.size();
+        double startX = activityX - (numTasks - 1) * 100.0;
+        double taskY = activityY + 120;
+
+        for (int i = 0; i < numTasks; i++) {
+            Task task = taskList.get(i);
+            double taskX = startX + i * 100;
+
+            drawConnector(activityX, activityY, taskX, taskY, pane);
+            drawNode(taskX, taskY, task.getValue(), "Tarea", "#FF5722", pane);
+        }
+    }
+
+
+    private void drawNode(double x, double y, String name, String type, String color, Pane pane) {
+        // Crear grupo para el nodo
+        Group nodeGroup = new Group();
+
+        // Crear círculo para el nodo
+        Circle circle = new Circle(x, y, 30);
+        circle.setFill(Color.web(color));
+        circle.setStroke(Color.BLACK);
+        circle.setStrokeWidth(2);
+
+        // Crear texto para el nombre
+        Text nameText = new Text(name);
+        nameText.setFont(Font.font("Arial", FontWeight.BOLD, 12));
+        nameText.setFill(Color.WHITE);
+        double textX = x - nameText.getBoundsInLocal().getWidth() / 2;
+        double textY = y;
+        nameText.setX(textX);
+        nameText.setY(textY);
+
+        // Crear texto para el tipo
+        Text typeText = new Text(type);
+        typeText.setFont(Font.font("Arial", 10));
+        typeText.setFill(Color.WHITE);
+        double typeX = x - typeText.getBoundsInLocal().getWidth() / 2;
+        double typeY = y + 15;
+        typeText.setX(typeX);
+        typeText.setY(typeY);
+
+        // Añadir efectos
+        circle.setEffect(new DropShadow(10, Color.GRAY));
+
+        // Añadir tooltip
+        Tooltip tooltip = new Tooltip(name + "\nTipo: " + type);
+        Tooltip.install(circle, tooltip);
+
+        // Añadir interactividad
+        circle.setOnMouseEntered(e -> circle.setFill(Color.web(color).brighter()));
+        circle.setOnMouseExited(e -> circle.setFill(Color.web(color)));
+
+        pane.getChildren().addAll(circle, nameText, typeText);
+    }
+
+    private void drawConnector(double startX, double startY, double endX, double endY, Pane pane) {
+        Line line = new Line(startX, startY + 30, endX, endY - 30);
+        line.setStroke(Color.GRAY);
+        line.setStrokeWidth(2);
+        line.getStrokeDashArray().addAll(5d);
+        pane.getChildren().add(line);
+    }
+
+    // Método recursivo para crear el árbol a partir del JSONObject
+    private TreeItem<String> createTree(JSONObject jsonObject) {
+        String value = jsonObject.optString("value", "No Value");
+        String description = jsonObject.optString("description", "No Description");
+
+        // Crear un nodo para el valor del nodo actual
+        TreeItem<String> treeItem = new TreeItem<>(value + ": " + description);
+        treeItem.setExpanded(true);
+
+        // Si el nodo tiene hijos, procesarlos recursivamente
+        if (jsonObject.has("children")) {
+            JSONArray children = jsonObject.getJSONArray("children");
+            for (int i = 0; i < children.length(); i++) {
+                JSONObject child = children.getJSONObject(i);
+                TreeItem<String> childItem = createTree(child);
+                treeItem.getChildren().add(childItem);
+            }
+        }
+
+        return treeItem;
+    }
+
+    }
+
+

@@ -2,7 +2,11 @@ package com.example.finalproyect.controllers;
 
 import com.example.finalproyect.Elements.Activity;
 import com.example.finalproyect.Elements.ProcessUQ;
+import com.example.finalproyect.QueueTask.MyQueue;
 import com.example.finalproyect.UserTree.Node;
+import com.example.finalproyect.UserTree.NodeSerializer;
+import com.example.finalproyect.UserTree.User;
+import com.example.finalproyect.UserTree.UserTree;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.example.finalproyect.Elements.Activity.exportToTxt;
+import static com.example.finalproyect.Elements.ProcessUQ.serializeProcess;
+import static com.example.finalproyect.UserTree.UserTreeTxtDeserializer.deserializeFromTxt;
 
 public class CrearActividadController {
 
@@ -35,26 +41,11 @@ public class CrearActividadController {
     @FXML
     private Button Regresar;
 
-    private Activity activity;
-    private ProcessUQ processUQ;
-
-    @FXML
-    public void initialize() {
-        try {
-            // Asumiendo que ProcessUQ tiene un método estático loadFromTxt
-            processUQ = ProcessUQ.loadFromTxt("C:\\Users\\Valeria\\Desktop\\process.txt");
-        } catch (IOException e) {
-            showErrorAlert("Error al cargar el proceso", "No se pudo cargar el archivo del proceso.");
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     void Anhadir_Actividad(ActionEvent event) {
         String name = Nombre.getText();
         String description = Descripcion.getText();
-
-        // Validar que Obligatoria.getText() no sea null o vacío
         String obligatoriaText = Obligatoria.getText();
         if (obligatoriaText == null || obligatoriaText.trim().isEmpty()) {
             showErrorAlert("Error", "El campo 'Obligatoria' no puede estar vacío");
@@ -64,23 +55,22 @@ public class CrearActividadController {
         boolean mandatory = Boolean.parseBoolean(obligatoriaText);
 
         if (!(name.isEmpty() || description.isEmpty())) {
-            Activity activity = new Activity(name, description, null, mandatory, null);
-            exportToTxt(activity);
+            Activity activity = new Activity(name, description, new ArrayList<>(), mandatory, new MyQueue<>());
+            NodeSerializer.serializeNode(activity,"C:\\Users\\Valeria\\Desktop\\actividades.txt");
+            try {
+                Stage currentStage = (Stage) Anhadir_Actividad.getScene().getWindow();
 
-            if (processUQ != null) {
-                ArrayList<Node> s = new ArrayList<>();
-                s.add(activity);
-                processUQ.setChild(s);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/CrearTarea.fxml"));
+                Scene secondScene = new Scene(loader.load());
+                Stage secondStage = new Stage();
+                secondStage.setScene(secondScene);
+                secondStage.show();
+                currentStage.close();
 
-                try {
-                    openCrearTareaWindow();
-                } catch (Exception e) {
-                    showErrorAlert("Error", "No se pudo abrir la ventana de crear tarea");
-                    e.printStackTrace();
-                }
-            } else {
-                showErrorAlert("Error", "El proceso no está inicializado");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
         } else {
             showErrorAlert("Campos incompletos", "Por favor, complete todos los campos.");
         }

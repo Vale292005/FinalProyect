@@ -2,6 +2,7 @@ package com.example.finalproyect.controllers;
 
 import com.example.finalproyect.MyMap.MyTreeMap;
 import com.example.finalproyect.UserTree.User;
+import com.example.finalproyect.UserTree.UserTree;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import static com.example.finalproyect.MyMap.MyTreeMap.loadFromFile;
+import static com.example.finalproyect.UserTree.NodeSerializer.serializeNode;
 
 public class User1Controller {
 
@@ -31,6 +33,7 @@ public class User1Controller {
     private TextField Usuario;
 
     private MyTreeMap<User,String> UserMap;
+    private UserTree treeUser;
 
     public void initialize(){
         UserMap=new MyTreeMap<>();
@@ -49,6 +52,9 @@ public class User1Controller {
         String cent=Usuario.getText();
         User user=new User(null,null,null,cent);
         String contrasenhaText=Contrasenha.getText();
+        UserTree treeUser=new UserTree(user);
+        serializeNode(user,"C:\\Users\\Valeria\\Desktop\\process.txt");
+
 
         if(UserMap!=null&&!contrasenhaText.isEmpty()){
             System.out.println(contrasenhaText);

@@ -153,15 +153,7 @@ public class Activity extends Node {
 		content += "Obligatoria: " + activity.isMandatory() + "\n";
 		content += "Tareas: \n";
 
-		if (!(activity.getMyTask() == null || !activity.getMyTask().iterator().hasNext())) {
-			for (Task task : activity.getMyTask()) {
-				content += "\tTarea: \n";
-				content += "\t\tValor: " + task.getValue() + "\n";
-				content += "\t\tDescripción: " + task.getDescription() + "\n";
-				content += "\t\tObligatoria: " + task.isMandatory() + "\n";
-				content += "\t\tTiempo: " + task.getTime() + "\n";
-			}
-		}
+
 
 
 		// Escribir en el archivo
@@ -172,5 +164,28 @@ public class Activity extends Node {
 			System.err.println("Error al escribir en el archivo: " + e.getMessage());
 		}
 	}
+	@Override
+	public void serialize(BufferedWriter writer) throws IOException {
+		writer.write("\tActividad:\n");
+		writer.write("\tNombre: " + value + "\n");
+		writer.write("\tObligatoria: " + mandatory + "\n");
+
+		if (getChild() != null) {
+			writer.write("\tTareas:\n");
+			for (Node child : getChild()) {
+				child.serialize(writer);
+			}
+		}
+		if (!(getMyTask() == null || !getMyTask().iterator().hasNext())) {
+			for (Task task : getMyTask()) {
+				writer.write("\tTarea: \n");
+				writer.write("\t\tValor: " + task.getValue() + "\n");
+				writer.write("\t\tDescripción: " + task.getDescription() + "\n");
+				writer.write("\t\tObligatoria: " + task.isMandatory() + "\n");
+				writer.write("\t\tTiempo: " + task.getTime() + "\n");
+			}
+		}
+	}
+
 
 }

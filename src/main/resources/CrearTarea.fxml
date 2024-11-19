@@ -5,56 +5,49 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <StackPane style="-fx-background-color: linear-gradient(to bottom right, #1a237e, #3949ab);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.finalproyect.controllers.CrearTareaController">
-   <VBox alignment="CENTER" spacing="15.0" maxWidth="400">
+   <VBox alignment="CENTER" maxWidth="400" spacing="15.0">
       <padding>
          <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
       </padding>
 
-      <Label text="Crear Tarea" style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;">
+      <Label style="-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;" text="Crear Tarea">
          <effect>
-            <DropShadow/>
+            <DropShadow />
          </effect>
       </Label>
 
       <Region prefHeight="20.0" />
 
-      <Label text="Nombre" style="-fx-text-fill: white; -fx-font-size: 14;"/>
-      <TextField fx:id="Nombre" style="-fx-background-radius: 15; -fx-background-color: rgba(255,255,255,0.9); -fx-prompt-text-fill: #666;"
-                 prefWidth="300" prefHeight="35"/>
+      <Label style="-fx-text-fill: white; -fx-font-size: 14;" text="Nombre" />
+      <TextField fx:id="Nombre" prefHeight="35" prefWidth="300" style="-fx-background-radius: 15; -fx-background-color: rgba(255,255,255,0.9); -fx-prompt-text-fill: #666;" />
 
-      <Label text="Descripción" style="-fx-text-fill: white; -fx-font-size: 14;"/>
-      <TextField fx:id="Descripcion" style="-fx-background-radius: 15; -fx-background-color: rgba(255,255,255,0.9); -fx-prompt-text-fill: #666;"
-                 prefWidth="300" prefHeight="35"/>
+      <Label style="-fx-text-fill: white; -fx-font-size: 14;" text="Descripción" />
+      <TextField fx:id="Descripcion" prefHeight="35" prefWidth="300" style="-fx-background-radius: 15; -fx-background-color: rgba(255,255,255,0.9); -fx-prompt-text-fill: #666;" />
 
-      <Label text="Obligatoria" style="-fx-text-fill: white; -fx-font-size: 14;"/>
-      <TextField fx:id="Obligatoria" style="-fx-background-radius: 15; -fx-background-color: rgba(255,255,255,0.9); -fx-prompt-text-fill: #666;"
-                 prefWidth="300" prefHeight="35"/>
+      <Label style="-fx-text-fill: white; -fx-font-size: 14;" text="Obligatoria" />
+      <TextField fx:id="Obligatoria" prefHeight="35" prefWidth="300" style="-fx-background-radius: 15; -fx-background-color: rgba(255,255,255,0.9); -fx-prompt-text-fill: #666;" />
 
-      <Label text="Tiempo" style="-fx-text-fill: white; -fx-font-size: 14;"/>
-      <TextArea fx:id="Tiempo" style="-fx-background-radius: 15; -fx-background-color: rgba(255,255,255,0.9); -fx-prompt-text-fill: #666;"
-                prefWidth="300" prefHeight="100"/>
+      <Label style="-fx-text-fill: white; -fx-font-size: 14;" text="Tiempo" />
+      <TextArea fx:id="Tiempo" prefHeight="100" prefWidth="300" style="-fx-background-radius: 15; -fx-background-color: rgba(255,255,255,0.9); -fx-prompt-text-fill: #666;" />
+      <Button fx:id="Ver" mnemonicParsing="false" onAction="#Ver" text="Ver" />
 
       <Region prefHeight="20.0" />
 
-      <Button fx:id="Anhadir_Tarea" onAction="#Anhadir_Tarea"
-              style="-fx-background-color: white; -fx-text-fill: #1a237e; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20;"
-              prefWidth="200" prefHeight="40" text="Añadir Tarea">
+      <Button fx:id="Anhadir_Tarea" onAction="#Anhadir_Tarea" prefHeight="40" prefWidth="200" style="-fx-background-color: white; -fx-text-fill: #1a237e; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 20;" text="Añadir Tarea">
          <effect>
-            <DropShadow/>
+            <DropShadow />
          </effect>
       </Button>
 
-      <Button fx:id="Regresar" onAction="#Regresar"
-              style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-border-color: white; -fx-border-radius: 20; -fx-background-radius: 20;"
-              prefWidth="200" prefHeight="40" text="Regresar">
+      <Button fx:id="Regresar" onAction="#Regresar" prefHeight="40" prefWidth="200" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-border-color: white; -fx-border-radius: 20; -fx-background-radius: 20;" text="Regresar">
          <effect>
-            <DropShadow/>
+            <DropShadow />
          </effect>
       </Button>
    </VBox>

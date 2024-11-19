@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.List;
 
 @JsonTypeName("Task")
@@ -56,4 +58,13 @@ public class Task extends Node {
     public String toString() {
         return "Tarea [value=" + value + ", description=" + description + ", obligatoria" +mandatory+", tiempo"+time+"]";
     }
+    @Override
+    public void serialize(BufferedWriter writer) throws IOException {
+        writer.write("\t\tTarea:\n");
+        writer.write("\t\tValor: " + value + "\n");
+        writer.write("\t\tDescripción: " + description + "\n");
+        writer.write("\t\tObligatoria: "+ mandatory+"\n");
+        writer.write("\t\tTiempo: \n");
+    }
+
 }

@@ -47,6 +47,7 @@ public class User2Controller {
     @FXML
     private Button Ver;
 
+
     @FXML
     void Crear(ActionEvent event) {
         try {

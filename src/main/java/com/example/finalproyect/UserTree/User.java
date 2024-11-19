@@ -3,6 +3,8 @@ package com.example.finalproyect.UserTree;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -51,6 +53,21 @@ public class User extends Node implements Comparable<User> {
     public void printNodeInfo() {
         System.out.println("User: " + user);  // Imprimir el nombre del usuario
     }
+
+    @Override
+    public void serialize(BufferedWriter writer) throws IOException {
+        writer.write("User:\n");
+        writer.write("Valor: " + user + "\n");
+
+        if (getChild() != null) {
+            writer.write("Actividades:\n");
+            for (Node child : getChild()) {
+                child.serialize(writer);
+            }
+        }
+
+    }
+
 
     @Override
     public String toString() {

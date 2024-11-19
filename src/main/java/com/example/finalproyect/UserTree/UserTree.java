@@ -170,11 +170,6 @@ public class UserTree {
         mapper.writeValue(new File(filePath), this);
     }
 
-    // Método para importar desde JSON
-//    public static UserTree importFromJson(String filePath) throws IOException {
-//        ObjectMapper mapper = new ObjectMapper();
-//        return mapper.readValue(new File(filePath), UserTree.class);
-//    }
 
 
 }
