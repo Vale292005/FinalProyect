@@ -3,6 +3,7 @@ package com.example.finalproyect.controllers;
 import com.example.finalproyect.Elements.Activity;
 import com.example.finalproyect.Elements.ProcessUQ;
 import com.example.finalproyect.Elements.Task;
+import com.example.finalproyect.Json.prueba;
 import com.example.finalproyect.QueueTask.MyQueue;
 import com.example.finalproyect.UserTree.User;
 import com.example.finalproyect.UserTree.UserTree;
@@ -24,6 +25,8 @@ import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +50,12 @@ public class User2Controller {
     @FXML
     private Button Ver;
 
-
+    public void initialize() throws IOException {
+        prueba serializer = new prueba();
+        ArrayList<UserTree> trees=new ArrayList<>();
+        File jsonFile = new File("arbol.json");
+        UserTree deserializedTree = serializer.deserialize(jsonFile);
+        Listaprocesos.getItems().add(deserializedTree);}
     @FXML
     void Crear(ActionEvent event) {
         try {

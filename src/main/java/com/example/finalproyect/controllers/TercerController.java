@@ -1,4 +1,5 @@
 package com.example.finalproyect.controllers;
+import com.example.finalproyect.Json.prueba;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.layout.Pane;
@@ -63,10 +64,13 @@ public class TercerController {
     private MyTreeMap<User, UserTree> treeMap;
     private UserTree Tree;
 
-    public void initialize() {
-
-
+    public void initialize() throws IOException {
+        prueba serializer = new prueba();
         ArrayList<UserTree> trees=new ArrayList<>();
+        File jsonFile = new File("arbol.json");
+        UserTree deserializedTree = serializer.deserialize(jsonFile);
+        ListTree.getItems().add(deserializedTree);
+
         try {
             String jsonPath = "arbol.json";
             UserTree userTree = UserTreeImporter.importFromJson(jsonPath);

@@ -168,10 +168,13 @@ public class CrearTareaController {
             vaciarArchivo(filePathTareas);
             vaciarArchivo(filePathActividades);
             vaciarArchivo(filePathProcesos);
-            String filePath = "arbol.json";
             listTree.add(treeUser+"");
+            prueba serializa = new prueba();
+            String filePath = "arbol.json";
+            prueba.serialize(treeUser.getRoot(), filePath);
             escribirEnArchivo("C:\\Users\\Valeria\\Desktop\\arbol.txt",listTree);
             prueba.serialize(treeUser.getRoot(), filePath);
+            mostrarTiempoTotal("C:\\Users\\Valeria\\Desktop\\tareas.txt");
 
             // Procesar las tareas, actividades y procesos
         } catch (IOException e) {
@@ -336,6 +339,31 @@ public class CrearTareaController {
 
         return treeItem;
     }
+    public void mostrarTiempoTotal(String filePathTareas) {
+        Deserializador deserializador = new Deserializador();
+        try {
+            // Deserializar las tareas
+            MyQueue<Task> tareas = deserializador.deserializeTareas(filePathTareas);
+
+            // Calcular el tiempo total de todas las tareas
+            int tiempoTotal = 0;
+            for (Task tarea : tareas) {
+                tiempoTotal += tarea.getTime();  // Obtiene el tiempo de cada tarea
+            }
+
+            // Crear y mostrar una ventana emergente con el tiempo total
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "El tiempo total de todas las tareas es: " + tiempoTotal + " minutos.", ButtonType.OK);
+            alert.setTitle("Tiempo Total de Tareas");
+            alert.setHeaderText("Cálculo Completo");
+            alert.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Manejo de errores si la deserialización falla
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error al leer los archivos: " + e.getMessage(), ButtonType.OK);
+            alert.setTitle("Error");
+            alert.showAndWait();
+        }}
 
     }
 
