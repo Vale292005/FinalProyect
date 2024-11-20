@@ -138,6 +138,7 @@ public class Main {
             System.err.println("Error durante la serialización/deserialización: " + e.getMessage());
             e.printStackTrace();
         }
+
     }
 
     // Método auxiliar para imprimir la información del árbol

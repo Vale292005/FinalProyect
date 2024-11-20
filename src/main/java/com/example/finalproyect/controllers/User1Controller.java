@@ -75,7 +75,8 @@ public class User1Controller {
                         e.printStackTrace();
                     }
                 }
-            }}
+            }
+        }
         else{            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("ERROR");
             alert.setHeaderText(null);

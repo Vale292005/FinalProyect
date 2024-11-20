@@ -55,6 +55,7 @@ public class User2Controller {
         ArrayList<UserTree> trees=new ArrayList<>();
         File jsonFile = new File("arbol.json");
         UserTree deserializedTree = serializer.deserialize(jsonFile);
+        deserializedTree.setRoot(deserializedTree.getRoot().getChildren(0));
         Listaprocesos.getItems().add(deserializedTree);}
     @FXML
     void Crear(ActionEvent event) {

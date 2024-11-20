@@ -1,10 +1,22 @@
 {
-  "value" : "Usuario Root",
-  "description" : "Usuario principal",
+  "value" : "",
+  "description" : "",
   "children" : [ {
-    "value" : "Proceso 1",
-    "description" : "Descripción del proceso 1",
-    "idProcess" : "ID1",
-    "children" : [ ]
+    "value" : "jkjbk",
+    "description" : "Descripción",
+    "idProcess" : "Id",
+    "children" : [ {
+      "value" : "jbjbk",
+      "description" : null,
+      "mandatory" : false,
+      "myTask" : {
+        "queue" : [ {
+          "value" : null,
+          "description" : null,
+          "mandatory" : false,
+          "time" : 0
+        } ]
+      }
+    } ]
   } ]
 }

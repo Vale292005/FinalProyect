@@ -77,7 +77,7 @@ public class CrearTareaController {
         String timeText = Tiempo.getText().trim();
 
         // Validar campos vacíos
-        if (name.isEmpty() || description.isEmpty() || timeText.isEmpty() || mandatoryText.isEmpty()) {
+        if (name.isEmpty() || description.isEmpty() || timeText.isEmpty() ) {
             showErrorAlert("Todos los campos son obligatorios.");
             return;
         }
@@ -86,6 +86,7 @@ public class CrearTareaController {
             // Parsear valores de la tarea
             boolean mandatory = Boolean.parseBoolean(mandatoryText);  // Verifica si el texto es "true" o "false"
             int time = Integer.parseInt(timeText);  // Convierte el tiempo en un número entero
+            System.out.println(time+"");
 
             // Crear la tarea
             Task task = new Task(name, description, new ArrayList<>(), mandatory, time);
@@ -348,7 +349,8 @@ public class CrearTareaController {
             // Calcular el tiempo total de todas las tareas
             int tiempoTotal = 0;
             for (Task tarea : tareas) {
-                tiempoTotal += tarea.getTime();  // Obtiene el tiempo de cada tarea
+                tiempoTotal += tarea.getTime();
+                System.out.println(tiempoTotal);// Obtiene el tiempo de cada tarea
             }
 
             // Crear y mostrar una ventana emergente con el tiempo total
